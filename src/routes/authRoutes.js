@@ -8,7 +8,6 @@ const credentials = require('../credentials');
 
 router.post ('/signup', async (req, res)=> {
     try {
-        console.log(req);
         let {email, password} = req.body
         const user = new User({email, password});
         await user.save();
@@ -26,6 +25,7 @@ router.post ('/signup', async (req, res)=> {
 
 router.post(`/signin`, async (req, res) => {
     const {email, password} = req.body;
+    const secretKey = credentials["secureKey"]
 
     if (!email || !password)
     {
@@ -40,7 +40,7 @@ router.post(`/signin`, async (req, res) => {
 
     try {
         await user.comparePassword(password);
-        const token = jwt.sign({userId: user._id}, "TotallySecretKey")
+        const token = jwt.sign({userId: user._id}, secretKey)
         return res.send({token})
 
     } catch (err)
