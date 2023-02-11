@@ -13,6 +13,17 @@ router.get('/workouts', async (req, res) => {
     res.send(workouts);
 })
 
+router.get('/workouts/:workoutID', async (req,res) => {
+    let workoutID = req.params.workoutID;
+    const workout = await Workout.find({_id: workoutID, userId: req.user._id});
+    if (workout.length != 1)
+    {
+        res.send(400).send({error: "ERROR"});
+    }
+    res.send(workout[0]);
+})
+
+
 router.post('/workouts', async (req, res) => {
     const {workoutDate, exerciseList, notes} = req.body;
     if (!workoutDate || !exerciseList)
