@@ -14,13 +14,21 @@ router.get('/workouts', async (req, res) => {
 })
 
 router.get('/workouts/:workoutID', async (req,res) => {
-    let workoutID = req.params.workoutID;
-    const workout = await Workout.find({_id: workoutID, userId: req.user._id});
-    if (workout.length != 1)
+    try {
+        let workoutID = mongoose.Types.ObjectId(req.params.workoutID);
+        const currentUser = req.user._id;
+        const workout = await Workout.findOne({_id: workoutID, userId: currentUser});
+        if (workout)
+        {
+            res.send(workout);
+        } else {
+            res.status(500).send("Invalid Request");
+        }
+    } catch (err)
     {
-        res.send(400).send({error: "ERROR"});
+        console.log(err);
+        res.status(500).send(err.message);
     }
-    res.send(workout[0]);
 })
 
 

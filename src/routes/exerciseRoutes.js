@@ -13,13 +13,21 @@ router.get('/exercises', async (req, res) => {
 })
 
 router.get('/exercises/:exerciseID', async (req,res) => {
-    let exerciseID = req.params.exerciseID;
-    const exercise = await Exercise.find({_id: exerciseID, userId: req.user._id});
-    if (exercise.length != 1)
+    try {
+        const currentUser = req.user._id;
+        const exerciseID = mongoose.Types.ObjectId(req.params.exerciseID);
+        const exercise = await Exercise.findOne({_id: exerciseID, userID: currentUser});
+        if (exercise)
+        {
+            res.send(exercise);
+        } else {
+            res.status(500).send("Invalid Request");
+        }
+    } catch (err)
     {
-        res.send(400).send({error: "ERROR"});
+        console.log(err);
+        res.status(500).send(err.message);
     }
-    res.send(exercise[0]);
 })
 
 router.post('/exercises', async (req, res) => {
