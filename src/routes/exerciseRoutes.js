@@ -30,6 +30,57 @@ router.get('/exercises/:exerciseID', async (req,res) => {
     }
 })
 
+router.put('/exercises', async (req, res) => {
+    try {
+        const {_id, name, muscleGroup, setList, notes} = req.body;
+        let updatedExercise = {
+            name,
+            muscleGroup,
+            setList,
+            notes
+        }
+        const targetID = mongoose.Types.ObjectId(_id);
+        const exercise = await Exercise.findByIdAndUpdate(targetID, updatedExercise, {new: true})
+        if (exercise)
+        {
+            res.send(exercise);
+        } else {
+            res.status(500).send("Invalid Request");
+        }
+        
+    } catch (err)
+    {
+        console.log(err);
+        res.status(500).send(err.message);
+    }
+})
+
+router.put('/exercises/:exerciseID', async (req, res) => {
+    try {
+        const {name, muscleGroup, setList, notes} = req.body;
+        let updatedExercise = {
+            name,
+            muscleGroup,
+            setList,
+            notes
+        }
+        const targetID = mongoose.Types.ObjectId(req.params.exerciseID);
+        const exercise = await Exercise.findByIdAndUpdate(targetID, updatedExercise, {new: true})
+        if (exercise)
+        {
+            res.send(exercise);
+        } else {
+            res.status(500).send("Invalid Request");
+        }
+        
+    } catch (err)
+    {
+        console.log(err);
+        res.status(500).send(err.message);
+    }
+})
+
+
 router.post('/exercises', async (req, res) => {
     const {name, muscleGroup, setList, notes} = req.body;
     if (!name || !muscleGroup || !setList)
