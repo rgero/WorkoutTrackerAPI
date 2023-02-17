@@ -28,5 +28,5 @@ app.get('/', requireAuth, (req, res) => {
 })
 
 app.listen(9000, ()=>{
-    console.log("Server started, listening on port 3000");
+    console.log("Server started, listening on port 9000");
 })
