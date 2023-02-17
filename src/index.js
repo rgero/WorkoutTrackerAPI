@@ -3,6 +3,7 @@ require('./models/Exercise');
 require('./models/Workout');
 
 const express = require('express')
+const cors = require('cors')
 const bodyParser = require('body-parser');
 const mongoose = require('./mongooseStarter')
 const authRoutes = require('./routes/authRoutes')
@@ -16,6 +17,7 @@ const app = express();
 
 //Body Parser has to be first.
 app.use(bodyParser.json());
+app.use(cors());
 app.use(authRoutes);
 app.use(exerciseRoutes);
 app.use(workoutRoutes);
@@ -25,6 +27,6 @@ app.get('/', requireAuth, (req, res) => {
     res.send(`Your e-mail: ${req.user.email}`);
 })
 
-app.listen(3000, ()=>{
+app.listen(9000, ()=>{
     console.log("Server started, listening on port 3000");
 })
