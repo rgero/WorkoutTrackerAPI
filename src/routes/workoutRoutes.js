@@ -20,6 +20,19 @@ router.get('/workouts/:workoutID', async (req,res) => {
         const workout = await Workout.findOne({_id: workoutID, userId: currentUser});
         if (workout)
         {
+            let parsedExerciseArray = workout.exerciseList;
+            let populatedExerciseArray = [];
+            for(let i = 0; i < parsedExerciseArray.length; i++)
+            {
+                let exercise = parsedExerciseArray[i];
+                let newExercise = await Exercise.findById(exercise);
+                if (newExercise)
+                {
+                    populatedExerciseArray.push(newExercise);
+                }
+            }
+            workout.exerciseList = populatedExerciseArray;
+
             res.send(workout);
         } else {
             res.status(500).send("Invalid Request");
