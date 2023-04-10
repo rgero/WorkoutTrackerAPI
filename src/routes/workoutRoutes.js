@@ -82,4 +82,19 @@ router.post('/workouts', async (req, res) => {
     }
 })
 
+router.delete('/workouts/:workoutID', async (req, res) => {
+    try { 
+        const currentUser = req.user._id;
+        const workoutID = mongoose.Types.ObjectId(req.params.workoutID);
+        const workout = await Workout.findOne({_id: workoutID, userID: currentUser});
+
+        const countDeleted = await Exercise.deleteMany({ _id: { $in: workout.exerciseList}})
+        const workoutDeleted = await Workout.deleteOne({ _id: workout._id})
+        res.send("Workout deleted");
+    } catch (err)
+    {
+        return res.status(422).send({error:err.message});
+    }
+})
+
 module.exports = router;
