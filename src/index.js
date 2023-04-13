@@ -1,5 +1,4 @@
 require('./models/User');
-require('./models/Exercise');
 require('./models/Workout');
 
 const express = require('express')
@@ -7,7 +6,6 @@ const cors = require('cors')
 const bodyParser = require('body-parser');
 const mongoose = require('./mongooseStarter')
 const authRoutes = require('./routes/authRoutes')
-const exerciseRoutes = require('./routes/exerciseRoutes')
 const workoutRoutes = require('./routes/workoutRoutes')
 const requireAuth = require('./middlewares/requireAuth')
 
@@ -19,7 +17,6 @@ const app = express();
 app.use(bodyParser.json());
 app.use(cors());
 app.use(authRoutes);
-app.use(exerciseRoutes);
 app.use(workoutRoutes);
 
 /* Express Set-up */
