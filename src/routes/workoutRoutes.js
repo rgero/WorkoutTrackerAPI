@@ -52,13 +52,25 @@ router.delete('/workouts/:workoutID', async (req, res) => {
     try { 
         const currentUser = req.user._id;
         const workoutID = mongoose.Types.ObjectId(req.params.workoutID);
-        const workout = await Workout.findOne({_id: workoutID, userID: currentUser});
-        const workoutDeleted = await Workout.deleteOne({ _id: workout._id})
+        await Workout.findOneAndDelete({_id: workoutID, userID: currentUser});
         res.send("Workout deleted");
     } catch (err)
     {
         return res.status(422).send({error:err.message});
     }
+})
+
+router.put('/workouts/:workoutID', async (req, res) => {
+    try { 
+        const currentUser = req.user._id;
+        const workoutID = req.body._id;
+        await Workout.findOneAndUpdate({_id: workoutID, userID: currentUser}, req.body)
+        res.send("Workout updated");
+    } catch (err)
+    {
+        return res.status(422).send({error:err.message});
+    }
+
 })
 
 module.exports = router;
