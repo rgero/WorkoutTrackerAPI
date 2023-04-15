@@ -62,10 +62,11 @@ router.delete('/workouts/:workoutID', async (req, res) => {
 
 router.put('/workouts/:workoutID', async (req, res) => {
     try { 
+        console.log("Hello");
         const currentUser = req.user._id;
         const workoutID = req.body._id;
-        await Workout.findOneAndUpdate({_id: workoutID, userID: currentUser}, req.body)
-        res.send("Workout updated");
+        const workout = await Workout.findOneAndUpdate({_id: workoutID, userID: currentUser}, req.body, {new: true})
+        res.send(workout);
     } catch (err)
     {
         return res.status(422).send({error:err.message});
