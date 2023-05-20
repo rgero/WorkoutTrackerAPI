@@ -8,8 +8,9 @@ const credentials = require('../credentials');
 
 router.post ('/signup', async (req, res)=> {
     try {
-        let {email, password} = req.body
-        const user = new User({email, password});
+        
+        let {email, displayName, password} = req.body
+        const user = new User({email, password, displayName});
         await user.save();
 
         const secretKey = credentials["secureKey"]
