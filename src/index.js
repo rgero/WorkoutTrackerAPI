@@ -7,6 +7,7 @@ const bodyParser = require('body-parser');
 const mongoose = require('./mongooseStarter')
 const authRoutes = require('./routes/authRoutes')
 const workoutRoutes = require('./routes/workoutRoutes')
+const userRoutes = require('./routes/userRoutes')
 const requireAuth = require('./middlewares/requireAuth')
 
 mongoose.start();
@@ -18,6 +19,7 @@ app.use(bodyParser.json());
 app.use(cors());
 app.use(authRoutes);
 app.use(workoutRoutes);
+app.use(userRoutes);
 
 /* Express Set-up */
 app.get('/', requireAuth, (req, res) => {
