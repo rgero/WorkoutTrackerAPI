@@ -57,4 +57,50 @@ router.post(`/signin`, async (req, res) => {
 
 })
 
+router.post(`/change`, async (req, res) => {
+    const {email, password, changes} = req.body;
+    const secretKey = credentials["secureKey"]
+
+    if (!email || !password || !changes)
+    {
+        return res.status(422).send({error: "Request not full"});
+    }
+
+    if (Object.keys(changes)==0)
+    {
+        return res.status(422).send({error: "Request not full"});
+    }
+
+    const user = await User.findOne({email});
+    if (!user)
+    {
+        return res.status(422).send({error: "Invalid email or password"});
+    }
+
+    try {
+        await user.comparePassword(password);
+
+        if (changes.email)
+        {
+            user.email = changes.email;
+        }
+
+        if (changes.password)
+        {
+            user.password = changes.password;
+        }
+
+        if (changes.displayName)
+        {
+            user.displayName = changes.displayName;
+        }
+
+        await user.save();
+        return res.send("User Updated");
+    } catch (err)
+    {
+        return res.status(422).send({error: "Invalid email or password"})
+    }
+})
+
 module.exports = router;

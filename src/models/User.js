@@ -23,7 +23,6 @@ userSchema.pre('save', function(next) {
     {
         return next();
     }
-
     bcrypt.genSalt(10, (err, salt)=> {
         if (err)
         {
