@@ -16,7 +16,7 @@ router.post ('/signup', async (req, res)=> {
         const secretKey = credentials["secureKey"]
         const token = jwt.sign({userId: user._id}, secretKey)
 
-        res.send({ token });
+        res.send({ token, email, displayName });
 
     } catch (err)
     {
@@ -42,7 +42,13 @@ router.post(`/signin`, async (req, res) => {
     try {
         await user.comparePassword(password);
         const token = jwt.sign({userId: user._id}, secretKey)
-        return res.send({token})
+
+        const response = {
+            token: token,
+            displayName: user.displayName,
+            email: user.email
+        }
+        return res.send(response)
 
     } catch (err)
     {
