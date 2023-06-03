@@ -8,7 +8,6 @@ const credentials = require('../credentials');
 
 router.post ('/signup', async (req, res)=> {
     try {
-        
         let {email, displayName, password} = req.body
         const user = new User({email, password, displayName});
         await user.save();
@@ -59,7 +58,6 @@ router.post(`/signin`, async (req, res) => {
 
 router.post(`/change`, async (req, res) => {
     const {email, password, changes} = req.body;
-    const secretKey = credentials["secureKey"]
 
     if (!email || !password || !changes)
     {
