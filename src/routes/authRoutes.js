@@ -58,6 +58,7 @@ router.post(`/signin`, async (req, res) => {
 
 router.post(`/change`, async (req, res) => {
     const {email, password, changes} = req.body;
+    const secretKey = credentials["secureKey"]
 
     if (!email || !password || !changes)
     {
@@ -94,7 +95,15 @@ router.post(`/change`, async (req, res) => {
         }
 
         await user.save();
-        return res.send("User Updated");
+
+        // Return the user data.
+        const token = jwt.sign({userId: user._id}, secretKey)
+        const response = {
+            token: token,
+            displayName: user.displayName,
+            email: user.email
+        }
+        return res.send(response);
     } catch (err)
     {
         return res.status(422).send({error: "Invalid email or password"})
