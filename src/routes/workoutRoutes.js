@@ -50,9 +50,12 @@ router.post('/workouts', async (req, res) => {
 
 router.delete('/workouts/:workoutID', async (req, res) => {
     try { 
-        const currentUser = req.user._id;
-        const workoutID = mongoose.Types.ObjectId(req.params.workoutID);
-        await Workout.findOneAndDelete({_id: workoutID, userID: currentUser});
+        const workoutID = new mongoose.Types.ObjectId(req.params.workoutID);
+        const workout = await Workout.findOneAndDelete({_id: workoutID, userId: req.user._id});
+        if (workout == null)
+        {
+            throw Error("Workout not found");
+        }
         res.send("Workout deleted");
     } catch (err)
     {
@@ -64,7 +67,7 @@ router.put('/workouts/:workoutID', async (req, res) => {
     try { 
         const currentUser = req.user._id;
         const workoutID = req.params.workoutID;
-        const workout = await Workout.findOneAndUpdate({_id: workoutID, userID: currentUser}, req.body, {new: true})
+        const workout = await Workout.findOneAndUpdate({_id: workoutID, userId: currentUser}, req.body, {new: true})
         res.send(workout);
     } catch (err)
     {
